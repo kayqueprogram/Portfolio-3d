@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
@@ -12,6 +12,7 @@ import {
 } from "./utils/mouseUtils";
 import setAnimations from "./utils/animationUtils";
 import { setProgress } from "../Loading";
+import { setAllTimeline, setCharTimeline } from "../utils/GsapScroll";
 
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
@@ -19,13 +20,17 @@ const Scene = () => {
   const sceneRef = useRef(new THREE.Scene());
   const { setLoading } = useLoading();
 
-  const [character, setChar] = useState<THREE.Object3D | null>(null);
   useEffect(() => {
     if (canvasDiv.current) {
-      let rect = canvasDiv.current.getBoundingClientRect();
-      let container = { width: rect.width, height: rect.height };
+      const canvasContainer = canvasDiv.current;
+      const rect = canvasContainer.getBoundingClientRect();
+      const container = { width: rect.width, height: rect.height };
       const aspect = container.width / container.height;
       const scene = sceneRef.current;
+      let isActive = true;
+      let animationFrame = 0;
+      let cleanupScrollAnimations: (() => void) | undefined;
+      let cleanupGeneralAnimations: (() => void) | undefined;
 
       const renderer = new THREE.WebGLRenderer({
         alpha: true,
@@ -36,7 +41,10 @@ const Scene = () => {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
-      canvasDiv.current.appendChild(renderer.domElement);
+      canvasContainer
+        .querySelectorAll("canvas")
+        .forEach((canvas) => canvas.remove());
+      canvasContainer.appendChild(renderer.domElement);
 
       const camera = new THREE.PerspectiveCamera(14.5, aspect, 0.1, 1000);
       camera.position.z = 10;
@@ -61,8 +69,13 @@ const Scene = () => {
             hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
             mixer = animations.mixer;
             const character = gltf.scene;
-            setChar(character);
+            if (!isActive) {
+              renderer.dispose();
+              return;
+            }
             scene.add(character);
+            cleanupScrollAnimations = setCharTimeline(character, camera);
+            cleanupGeneralAnimations = setAllTimeline();
             headBone = character.getObjectByName("spine006") || null;
             screenLight = character.getObjectByName("screenlight") || null;
             progress.loaded().then(() => {
@@ -71,9 +84,6 @@ const Scene = () => {
                 animations.startIntro();
               }, 2500);
             });
-            window.addEventListener("resize", () =>
-              handleResize(renderer, camera, canvasDiv, character)
-            );
           }
         })
         .catch(() => {
@@ -112,8 +122,13 @@ const Scene = () => {
         landingDiv.addEventListener("touchstart", onTouchStart);
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
+      const handleWindowResize = () =>
+        handleResize(renderer, camera, canvasDiv);
+      window.addEventListener("resize", handleWindowResize);
+
       const animate = () => {
-        requestAnimationFrame(animate);
+        if (!isActive) return;
+        animationFrame = requestAnimationFrame(animate);
         if (headBone) {
           handleHeadRotation(
             headBone,
@@ -133,14 +148,16 @@ const Scene = () => {
       };
       animate();
       return () => {
+        isActive = false;
+        cancelAnimationFrame(animationFrame);
         window.clearTimeout(debounce);
+        cleanupScrollAnimations?.();
+        cleanupGeneralAnimations?.();
         scene.clear();
         renderer.dispose();
-        window.removeEventListener("resize", () =>
-          handleResize(renderer, camera, canvasDiv, character!)
-        );
-        if (canvasDiv.current) {
-          canvasDiv.current.removeChild(renderer.domElement);
+        window.removeEventListener("resize", handleWindowResize);
+        if (renderer.domElement.parentElement === canvasContainer) {
+          canvasContainer.removeChild(renderer.domElement);
         }
         if (landingDiv) {
           document.removeEventListener("mousemove", onMouseMove);

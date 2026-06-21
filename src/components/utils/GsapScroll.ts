@@ -6,11 +6,12 @@ export function setCharTimeline(
   camera: THREE.PerspectiveCamera
 ) {
   let intensity: number = 0;
-  setInterval(() => {
+  const intensityInterval = window.setInterval(() => {
     intensity = Math.random();
   }, 200);
   const tl1 = gsap.timeline({
     scrollTrigger: {
+      id: "character-landing",
       trigger: ".landing-section",
       start: "top top",
       end: "bottom top",
@@ -20,6 +21,7 @@ export function setCharTimeline(
   });
   const tl2 = gsap.timeline({
     scrollTrigger: {
+      id: "character-about",
       trigger: ".about-section",
       start: "center 55%",
       end: "bottom top",
@@ -29,6 +31,7 @@ export function setCharTimeline(
   });
   const tl3 = gsap.timeline({
     scrollTrigger: {
+      id: "character-whatido",
       trigger: ".whatIDO",
       start: "top top",
       end: "bottom top",
@@ -52,7 +55,7 @@ export function setCharTimeline(
       object.material.transparent = true;
       object.material.opacity = 0;
       object.material.emissive.set("#C8BFFF");
-      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
+      gsap.timeline({ id: "character-light-flicker", repeat: -1, repeatRefresh: true }).to(object.material, {
         emissiveIntensity: () => intensity * 8,
         duration: () => Math.random() * 0.6,
         delay: () => Math.random() * 0.1,
@@ -122,6 +125,7 @@ export function setCharTimeline(
     if (character) {
       const tM2 = gsap.timeline({
         scrollTrigger: {
+          id: "character-mobile",
           trigger: ".what-box-in",
           start: "top 70%",
           end: "bottom top",
@@ -130,11 +134,23 @@ export function setCharTimeline(
       tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
     }
   }
+
+  return () => {
+    window.clearInterval(intensityInterval);
+    tl1.scrollTrigger?.kill();
+    tl2.scrollTrigger?.kill();
+    tl3.scrollTrigger?.kill();
+    tl1.kill();
+    tl2.kill();
+    tl3.kill();
+    gsap.getById("character-light-flicker")?.kill();
+  };
 }
 
 export function setAllTimeline() {
   const careerTimeline = gsap.timeline({
     scrollTrigger: {
+      id: "career-timeline",
       trigger: ".career-section",
       start: "top 50%",
       end: "bottom 30%",
@@ -188,4 +204,9 @@ export function setAllTimeline() {
       0
     );
   }
+
+  return () => {
+    careerTimeline.scrollTrigger?.kill();
+    careerTimeline.kill();
+  };
 }

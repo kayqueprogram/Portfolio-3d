@@ -380,7 +380,12 @@
 }
 
 .landing-h2-info {
+  display: block;
+  width: max-content;
+  max-width: 100%;
   white-space: nowrap;
+  font-size: clamp(15px, 1.55vw, 30px);
+  letter-spacing: clamp(0.2px, 0.06vw, 1.2px);
 }
 
 .landing-h2-info-1 {
@@ -506,7 +511,19 @@ h2.landing-info-h2 {
     text-align: left;
     transform: translate(0%, -50%);
     right: auto;
-    left: 66%;
+    left: 65%;
+    width: calc(35vw - 30px);
+    max-width: 560px;
+  }
+
+  .landing-info h2 {
+    max-width: 100%;
+  }
+
+  .landing-info .split-h2 {
+    width: max-content;
+    max-width: 100%;
+    flex-wrap: nowrap !important;
   }
 }
 
@@ -525,7 +542,20 @@ h2.landing-info-h2 {
     text-align: left;
     transform: translate(0%, -50%);
     right: auto;
-    left: 70%;
+    left: 68%;
+    width: calc(32vw - 30px);
+    max-width: 580px;
+  }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1250px) {
+  .landing-info {
+    left: 61%;
+    width: calc(39vw - 24px);
+  }
+
+  .landing-h2-info {
+    font-size: clamp(15px, 1.7vw, 21px);
   }
 }
 

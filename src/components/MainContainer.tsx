@@ -11,24 +11,35 @@ import Work from "./Work";
 import TechStackNew from "./TechStackNew";
 import CallToAction from "./CallToAction";
 import setSplitText from "./utils/splitText";
+import MobilePortfolio from "./MobilePortfolio";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
+  const forceMobilePreview = new URLSearchParams(window.location.search).has(
+    "mobile"
+  );
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
     window.innerWidth > 1024
   );
-  const [isMobile] = useState<boolean>(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState<boolean>(
+    window.innerWidth <= 768 || forceMobilePreview
+  );
 
   useEffect(() => {
     const resizeHandler = () => {
       setSplitText();
       setIsDesktopView(window.innerWidth > 1024);
+      setIsMobile(window.innerWidth <= 768 || forceMobilePreview);
     };
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
     return () => {
       window.removeEventListener("resize", resizeHandler);
     };
-  }, [isDesktopView]);
+  }, [forceMobilePreview, isDesktopView]);
+
+  if (isMobile) {
+    return <MobilePortfolio />;
+  }
 
   return (
     <div className="container-main">

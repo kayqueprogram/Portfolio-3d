@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { DRACOLoader, GLTF, GLTFLoader } from "three-stdlib";
-import { setCharTimeline, setAllTimeline } from "../../utils/GsapScroll";
 import { decryptFile } from "./decrypt";
 
 const applySkinTone = (character: THREE.Object3D) => {
@@ -79,10 +78,25 @@ const addMustache = (character: THREE.Object3D) => {
     roughness: 0.92,
     metalness: 0,
   });
-  const geometry = new THREE.CapsuleGeometry(0.045, 0.52, 6, 20);
+  const mustacheShape = new THREE.Shape();
+  mustacheShape.moveTo(-0.36, -0.025);
+  mustacheShape.quadraticCurveTo(-0.22, 0.035, 0, 0.008);
+  mustacheShape.quadraticCurveTo(0.22, 0.035, 0.36, -0.025);
+  mustacheShape.quadraticCurveTo(0.22, -0.075, 0, -0.042);
+  mustacheShape.quadraticCurveTo(-0.22, -0.075, -0.36, -0.025);
+
+  const geometry = new THREE.ExtrudeGeometry(mustacheShape, {
+    depth: 0.035,
+    bevelEnabled: true,
+    bevelSegments: 3,
+    bevelSize: 0.012,
+    bevelThickness: 0.01,
+    curveSegments: 20,
+  });
+  geometry.center();
+
   const mustacheMesh = new THREE.Mesh(geometry, material);
-  mustacheMesh.rotation.z = Math.PI / 2;
-  mustacheMesh.scale.set(1, 1, 0.42);
+  mustacheMesh.scale.set(1, 1, 0.8);
   mustacheMesh.frustumCulled = false;
 
   mustache.add(mustacheMesh);
@@ -159,8 +173,6 @@ const setCharacter = (
               }
             });
             resolve(gltf);
-            setCharTimeline(character, camera);
-            setAllTimeline();
             character!.getObjectByName("footR")!.position.y = 3.36;
             character!.getObjectByName("footL")!.position.y = 3.36;
             dracoLoader.dispose();

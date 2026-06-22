@@ -56,7 +56,7 @@ const MobilePortfolio = () => {
       </section>
 
       <section className="mp-section">
-        <span className="mp-section-label">O que eu faço</span>
+        <span className="mp-section-label">O que <br /> eu <br /> faço</span>
         <div className="mp-services">
           {[config.skills.develop, config.skills.design].map((skill, index) => (
             <article className="mp-service-card" key={skill.title}>

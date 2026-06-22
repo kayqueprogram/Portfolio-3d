@@ -28,11 +28,16 @@ const WhatIDo = () => {
   return (
     <div className="whatIDO">
       <div className="what-box">
-        <h2 className="title">
-          O <span className="hat-h2">QUE</span>
-          <div>
-            &nbsp;EU<span className="do-h2"> FAÇO</span>
-          </div>
+        <h2 className="what-title">
+          <span className="what-title-line">
+            O <span className="hat-h2">QUE</span>
+          </span>
+          <span className="what-title-line">
+            EU
+          </span>
+          <span className="what-title-line">
+            <span className="do-h2">FAÇO</span>
+          </span>
         </h2>
       </div>
       <div className="what-box">

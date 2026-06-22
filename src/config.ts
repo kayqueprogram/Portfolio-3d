@@ -14,7 +14,7 @@ export const config = {
   about: {
     title: "Sobre mim",
     description:
-      "Sou Kayque de Jesus, desenvolvedor Full Stack de São Bernardo do Campo e estudante de Ciência da Computação. Transformo ideias em aplicações completas, combinando interfaces intuitivas, APIs, bancos de dados e automação. Gosto especialmente de projetos com impacto real — de plataformas de segurança e logística a jogos, produtos educacionais e ferramentas com inteligência artificial.",
+      "Sou Kayque de Jesus, desenvolvedor Full Stack e estudante de Ciência da Computação. Crio aplicações completas, automações e integrações com foco em desempenho, usabilidade e soluções para problemas reais.",
   },
   experiences: [
     {
@@ -215,14 +215,14 @@ export const config = {
       description: "Produtos digitais completos, do front-end à infraestrutura",
       details:
         "Desenvolvo aplicações modernas e responsivas, APIs, integrações e bancos de dados. Meu foco é transformar requisitos em produtos confiáveis, performáticos e fáceis de usar.",
-      tools: ["React", "Next.js", "TypeScript", "Node.js", "Python", "Elixir", "Phoenix", "REST APIs", "Firebase", "SQL"],
+      tools: ["React", "Next.js", "Angular", "Vue.js", "React Native", "Flutter", "Dart", "Swift", "Android", "Electron", "Three.js", "TypeScript", "Node.js", "NestJS", "Python", "FastAPI", "Django", "Flask", "Elixir", "Phoenix", ".NET", "C#", "C++", "Rust", "Kotlin", "Java", "Spring", "Go", "PHP", "Laravel", "REST APIs", "GraphQL", "Firebase", "Supabase", "SQL"],
     },
     design: {
       title: "PRODUTO & AUTOMAÇÃO",
       description: "Experiências intuitivas e processos mais inteligentes",
       details:
         "Uno engenharia, UI/UX e automação para criar soluções com impacto prático, desde sistemas operacionais e plataformas educacionais até games e produtos com IA.",
-      tools: ["UI/UX", "Tailwind CSS", "Figma", "OpenAI API", "Web Scraping", "Ren'Py", "Git", "Vercel", "Linux", "Agile"],
+      tools: ["UI/UX", "Tailwind CSS", "Bootstrap", "Sass", "Figma", "OpenAI API", "TensorFlow", "PyTorch", "Pandas", "NumPy", "OpenCV", "Hadoop", "Spark", "Web Scraping", "Ren'Py", "Docker", "Kubernetes", "Terraform", "Ansible", "Helm", "Redis", "RabbitMQ", "Kafka", "Prisma", "Git", "GitHub Actions", "AWS", "Azure", "Google Cloud", "Cloudflare", "DigitalOcean", "Vercel", "Linux", "Bash", "PowerShell", "Postman", "Jest", "Cypress", "Selenium", "Grafana", "Prometheus", "Elasticsearch", "Nginx", "Agile"],
     },
   },
 };

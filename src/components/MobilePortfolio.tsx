@@ -132,7 +132,14 @@ const MobilePortfolio = () => {
         <div className="mp-stack-list">
           {[
             "React", "Next.js", "TypeScript", "Node.js", "Python", "Elixir",
-            "Phoenix", "Firebase", "PostgreSQL", "MySQL", "Git", "Linux",
+            "Phoenix", ".NET", "C#", "C++", "Rust", "Kotlin", "Java",
+            "Spring", "Go", "PHP", "Laravel", "NestJS", "FastAPI", "Django",
+            "Angular", "Vue.js", "React Native", "Flutter", "Dart", "Swift",
+            "Android", "Electron", "Three.js", "Firebase", "Supabase", "PostgreSQL", "MySQL",
+            "MongoDB", "Redis", "Docker", "Kubernetes", "GraphQL", "Prisma",
+            "RabbitMQ", "Kafka", "AWS", "Azure", "Google Cloud", "Cloudflare",
+            "TensorFlow", "PyTorch", "Pandas", "OpenCV", "Elasticsearch",
+            "Grafana", "Prometheus", "Git", "Linux", "Bash", "PowerShell",
           ].map((tech) => (
             <span key={tech}>{tech}</span>
           ))}

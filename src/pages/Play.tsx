@@ -35,22 +35,6 @@ interface ChatMessage {
   content: string;
 }
 
-// API key is now handled server-side in api/chat.js
-
-const SYSTEM_PROMPT = `Você é o assistente virtual do portfólio de Kayque de Jesus.
-
-Informações sobre Kayque:
-- Desenvolvedor Full Stack de São Bernardo do Campo, SP
-- Estudante de Ciência da Computação na Universidade Anhanguera
-- Trabalha com React, Next.js, TypeScript, Node.js, Python, Elixir, Phoenix, Firebase e bancos SQL
-- Cria produtos web, automações, sistemas de gestão, games e integrações com inteligência artificial
-- Projetos em destaque: AutoVagas, SafeCircle, Entre Mundos, Portal Educacional Omar Donato, DataBridge e LifeQuest
-- Entre Mundos é uma visual novel patrocinada pelo edital da Lei Paulo Gustavo de São Bernardo do Campo
-- GitHub: github.com/kayqueprogram
-- Contato: kayquedejesusdossantos@gmail.com
-
-Responda sempre em português, de forma simpática, objetiva e profissional. Deixe claro que você é um assistente virtual quando isso for relevante. Não invente experiências, datas ou informações que não estejam listadas acima.`;
-
 const Play = () => {
   const [game, setGame] = useState(new Chess());
   const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
@@ -220,7 +204,6 @@ const Play = () => {
 
     try {
       const messages = [
-        { role: 'system', content: SYSTEM_PROMPT },
         ...chatMessages.filter(m => m.role !== 'system').map(m => ({
           role: m.role,
           content: m.content
@@ -240,10 +223,15 @@ const Play = () => {
 
       const data = await response.json();
 
-      if (data.choices && data.choices[0]?.message?.content) {
+      if (!response.ok) {
+        throw new Error(data.error || "Falha ao consultar o assistente.");
+      }
+
+      const content = data.message || data.choices?.[0]?.message?.content;
+      if (content) {
         const assistantMessage: ChatMessage = {
           role: 'assistant',
-          content: data.choices[0].message.content
+          content
         };
         setChatMessages(prev => [...prev, assistantMessage]);
       } else {
@@ -253,7 +241,9 @@ const Play = () => {
       console.error('Chat error:', error);
       const errorMessage: ChatMessage = {
         role: 'assistant',
-        content: 'Sorry, having some connection issues. Try again? 😅'
+        content: error instanceof Error
+          ? error.message
+          : 'Não consegui responder agora. Tente novamente em alguns instantes.'
       };
       setChatMessages(prev => [...prev, errorMessage]);
     } finally {
